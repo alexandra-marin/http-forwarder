@@ -1,64 +1,9 @@
 const flattenObject = require('../src/transformations/flattenObject');
-
-// const payload = {
-//   events: [
-//     {
-//       t: 'lift-off',
-//       engines: 4,
-//       fuel: 78,
-//       successful: true,
-//       temperature: {
-//         engine: 80,
-//         cabin: 31
-//       },
-//       timestamp: 1595244264059,
-//       'lat-lon': [
-//         -16.270183,
-//         168.110748
-//       ]
-//     },
-//     {
-//       t: 'landing',
-//       engines: 1,
-//       fuel: 26,
-//       successful: true,
-//       temperature: {
-//         engine: 80,
-//         cabin: 31
-//       },
-//       timestamp: 1595524813145,
-//       'lat-lon': [
-//         51.769455,
-//         182.818610
-//       ],
-//     }
-//   ]
-// };
-
-// describe('Transformations', () => {
-//   it('spaceship monitor', () => {
-//     const payload = {
-//       temperature: {
-//         engine: 80,
-//         cabin: 31
-//       }
-//     };
-//     const o1 = Object.assign(
-//       {},
-//       ...(function _flatten(o, nestedProp) {
-//         return [].concat(...Object.keys(o)
-//           .map((k, index) => (typeof o[k] === 'object'
-//             ? _flatten(o[k], Object.keys(index))
-//             : ({ [k]: o[k] }))));
-//       }(payload))
-//     );
-//     console.log(o1);
-//     (1).should.equal(1);
-//   });
-// });
+const buildUrlParam = require('../src/transformations/buildUrlParam');
+const capitalizeKeys = require('../src/transformations/capitalizeKeys');
 
 describe('Transformations', () => {
-  it('spaceship monitor requires a flat object', () => {
+  it('spaceship requires a flat object', () => {
     const payload = {
       engines: 4,
       temperature: {
@@ -84,6 +29,49 @@ describe('Transformations', () => {
     };
 
     const result = flattenObject(payload);
+
+    result.should.deep.equal(expected);
+  });
+
+  it('monitor requires extracted timestamp param', () => {
+    const payload = {
+      timestamp: 1595244264059,
+      engines: 4,
+    };
+    const expected = { param: 1595244264059, payload: { engines: 4 } };
+
+    const result = buildUrlParam(payload, 'timestamp');
+
+    result.should.deep.equal(expected);
+  });
+
+  it('analytics requires capitalization (except t)', () => {
+    const payload = {
+      t: 'landing',
+      engines: 1,
+      temperature: {
+        engine: 80,
+        cabin: 31
+      },
+      'lat-lon': [
+        51.769455,
+        182.818610
+      ],
+    };
+    const expected = {
+      t: 'landing',
+      Engines: 1,
+      Temperature: {
+        Engine: 80,
+        Cabin: 31
+      },
+      'Lat-lon': [
+        51.769455,
+        182.818610
+      ],
+    };
+
+    const result = capitalizeKeys(payload, 't');
 
     result.should.deep.equal(expected);
   });
