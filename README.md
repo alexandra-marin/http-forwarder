@@ -23,4 +23,6 @@ npm run dev
 ```
 
 ## Improvements
+- sanitize inputs
+- extract magic strings
 - add retry functionality
