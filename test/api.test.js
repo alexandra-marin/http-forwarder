@@ -13,12 +13,12 @@ describe('GET /api/v1', () => {
   });
 });
 
-// describe('GET /api/v1/emojis', () => {
-//   it('responds with a json message', (done) => {
-//     request(app)
-//       .get('/api/v1/emojis')
-//       .set('Accept', 'application/json')
-//       .expect('Content-Type', /json/)
-//       .expect(404, done);
-//   });
-// });
+describe('POST /api/v1/emojis', () => {
+  it('responds with a message', (done) => {
+    request(app)
+      .post('/api/v1')
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .expect(200, done);
+  });
+});

@@ -1,3 +1,5 @@
+// eslint-disable-next-line no-unused-vars
+const should = require('chai').should();
 const flattenObject = require('../src/transformations/flattenObject');
 const buildUrlParam = require('../src/transformations/buildUrlParam');
 const capitalizeKeys = require('../src/transformations/capitalizeKeys');
