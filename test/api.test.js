@@ -13,12 +13,14 @@ describe('GET /api/v1', () => {
   });
 });
 
-describe('POST /api/v1/emojis', () => {
-  it('responds with a message', (done) => {
-    request(app)
-      .post('/api/v1')
-      .set('Accept', 'application/json')
-      .expect('Content-Type', /json/)
-      .expect(200, done);
+describe('POST /api/v1', () => {
+  it('responds with a message', async () => {
+    const response = await request(app)
+      .post('/api/v1/')
+      .send({ name: 'john' })
+      .set('Accept', 'application/json');
+
+    response.status.should.eq(400);
+    response.body.errors[0].msg.should.be.eq('Events cannot be blank');
   });
 });
